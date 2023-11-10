@@ -1,4 +1,5 @@
 
+
 import React, { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -6,9 +7,13 @@ import Container from '@mui/material/Container';
 import { useSelector, useDispatch } from 'react-redux';
 import MenuItem from '@mui/material/MenuItem';
 import axios from 'axios';
-import {infoUserCreatePage} from '../reduxStore/slices/toggleCreateUserPage'
+import { infoUserCreatePage } from '../reduxStore/slices/toggleCreateUserPage'
+import { useNavigate, useParams } from 'react-router-dom';
 
-function CreateNewUser() {
+function UpdateuserDetails() {
+	const navigate = useNavigate();
+	const { id } = useParams();
+	console.log("idwwe", id);
 	const dispatch = useDispatch();
 	const [formData, setFormData] = useState({
 		first_name: '',
@@ -37,9 +42,9 @@ function CreateNewUser() {
 		}
 	};
 
-	const handleSubmit = async (event) => {
+	const handleUpdatedetail = async (event) => {
 		event.preventDefault();
-		const res = await axios.post("http://localhost:8080/api/users", formData);
+		const res = await axios.put(`http://localhost:8080/api/users/${id}`, formData);
 		try {
 			if (res.status === 201) {
 				setFormData({
@@ -50,15 +55,15 @@ function CreateNewUser() {
 					domain: '',
 					avatar: '',
 					available: '',
-				})
-				alert("User created successfully");
-				dispatch(infoUserCreatePage(!createUserInfoPage));
+				});
+				alert("User Updated successfully");
+				navigate('/')
 			}
 		} catch (error) {
 			console.log("Internal server error !!!");
 		}
 	};
-	
+
 	return (
 		<Container
 			maxWidth="xs"
@@ -67,18 +72,16 @@ function CreateNewUser() {
 				top: '50%',
 				left: '50%',
 				transform: 'translate(-50%, -50%)',
-				display: createUserInfoPage === true ? 'block' : 'none',
-				filter: createUserInfoPage === true && 'none',
 				position: 'fixed',
 				backgroundColor: 'white',
 				padding: '16px',
 				boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)',
 				borderRadius: '12px',
-				maxHeight: '80vh', 
-				marginTop:"50px"
+				maxHeight: '80vh',
+				marginTop: "50px"
 			}}
 		>
-			<form onSubmit={handleSubmit}>
+			<form onSubmit={handleUpdatedetail}>
 				<TextField
 					label="First Name"
 					variant="outlined"
@@ -153,12 +156,12 @@ function CreateNewUser() {
 					<MenuItem value={'true'}>true</MenuItem>
 					<MenuItem value={'false'}>false</MenuItem>
 				</TextField>
-				<Button variant="contained" color="primary" type="submit" fullWidth>
-					Create User
+				<Button variant="contained" color="primary" type="submit" fullWidth >
+					Update User
 				</Button>
 			</form>
 		</Container>
 	);
 }
 
-export default CreateNewUser;
+export default UpdateuserDetails;

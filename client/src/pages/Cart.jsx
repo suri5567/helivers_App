@@ -16,7 +16,7 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    marginTop: '20px', // Adjust the margin from the top
+    marginTop: '20px', 
   },
   paper: {
     display: 'flex',
@@ -25,32 +25,32 @@ const styles = {
     justifyContent: 'space-between',
     padding: '20px',
     boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
-    height: '100%', // Spread over the whole grid
-    background: '#f5f5f5', // Nice background color
-    borderRadius: '12px', // Border radius
+    height: '100%', 
+    background: '#f5f5f5',
+    borderRadius: '12px',
   },
   avatar: {
     width: '80px',
     height: '80px',
-    marginBottom: '10px', // Margin at the bottom
+    marginBottom: '10px', 
   },
   button: {
     marginTop: '10px',
-    backgroundColor: '#ff0000', // Red color
+    backgroundColor: '#ff0000', 
     color: 'white',
-    padding: '12px 24px', // Increased padding and size
-    borderRadius: '8px', // Rounded corners
-    fontSize: '14px', // Font size
-    transition: 'background-color 0.3s', // Smooth transition for hover effect
+    padding: '12px 24px', 
+    borderRadius: '8px', 
+    fontSize: '14px', 
+    transition: 'background-color 0.3s', 
     '&:hover': {
-      backgroundColor: '#d30000', // Darker red on hover
+      backgroundColor: '#d30000', 
     },
   },
   text: {
-    fontFamily: 'Arial, sans-serif', // Font family for text
+    fontFamily: 'Arial, sans-serif',
   },
   blueText: {
-    color: 'blue', // Blue color for email text
+    color: 'blue',
   },
 };
 
@@ -86,7 +86,7 @@ const Cart = () => {
               <Button
                 variant="contained"
                 style={styles.button}
-                onClick={() => removeItemFromCart(item._id)}
+				onClick={() => dispatch(deleteCartItem(item._id))}
               >
                 <DeleteIcon /> Delete
               </Button>

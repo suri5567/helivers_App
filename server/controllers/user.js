@@ -12,196 +12,49 @@ export const handleUserInfo = async (req, res) => {
 
 
 }
-// export const getAllUserInfo = async (req, res) => {
-// 	try {
-// 		const searchTerm = req.query.searchTerm || "";
-// 		const selection = req.query.select; 
-// 		const limit = parseInt(req.query.limit) || 20;
-// 		const currentPage = parseInt(req.query.page) || 1;
-// 		const totalCount = await model.countDocuments();
-// 		const totalPages = Math.ceil(totalCount / limit);
 
-// 		let query = {};
-
-// 		if (searchTerm) {
-// 			query = { first_name: { $regex: searchTerm, $options: 'i' } };
-// 		}
-
-// 		const result = await model.find(query)
-// 			.skip((currentPage - 1) * limit)
-// 			.limit(limit);
-
-// 		return res.status(200).json({ result, totalPages });
-// 	} catch (error) {
-// 		console.error(error);
-// 		return res.status(500).json("Internal server error !!!");
-// 	}
-// };
-
-// export const getAllUserInfo = async (req, res) => {
-// 	try {
-// 	  const searchTerm = req.query.searchTerm || "";
-// 	  const selection = req.query.select;
-// 	  const limit = parseInt(req.query.limit) || 20;
-// 	  const currentPage = parseInt(req.query.page) || 1;
-// 	  const totalCount = await model.countDocuments();
-// 	  const totalPages = Math.ceil(totalCount / limit);
-
-// 	  let query = {};
-
-// 	  if (searchTerm) {
-// 		query = { first_name: { $regex: searchTerm, $options: 'i' } };
-// 	  }
-
-// 	  if (selection) {
-// 		// Build a dynamic query based on the selection
-// 		query.$or = selection.map((group) => {
-// 		  return {
-// 			$and: group.map((item) => {
-// 			  // Assuming your items are in the format of { key: 'field', value: 'selectedValue' }
-// 			  const key = item.key;
-// 			  const value = item.value;
-
-// 			  return { [key]: value };
-// 			}),
-// 		  };
-// 		});
-// 	  }
-
-// 	  const result = await model.find(query)
-// 		.skip((currentPage - 1) * limit)
-// 		.limit(limit);
-
-// 	  return res.status(200).json({ result, totalPages });
-// 	} catch (error) {
-// 	  console.error(error);
-// 	  return res.status(500).json("Internal server error !!!");
-// 	}
-//   };
-
-// export const getAllUserInfo = async (req, res) => {
-// 	try {
-// 		const searchTerm = req.query.searchTerm || "";
-// 		const selection = JSON.parse(req.query.select) || []; // Parse the selection as JSON
-// 		const limit = parseInt(req.query.limit) || 20;
-// 		const currentPage = parseInt(req.query.page) || 1;
-
-
-// 		// console.log("selection", selection)
-// 		let query = {};
-
-// 		if (searchTerm) {
-// 			query = { first_name: { $regex: searchTerm, $options: 'i' } };
-// 		}
-
-// 		if (selection.length > 0) {
-// 			// Build a dynamic query based on the selection
-// 			query.$or = selection.map((item) => {
-// 				return {
-// 					[item.key]: item.value,
-// 				};
-// 			});
-// 		}
-
-// 		const result = await model
-// 			.find(query)
-// 			.skip((currentPage - 1) * limit)
-// 			.limit(limit);
-
-// 		return res.status(200).json({ result });
-// 	} catch (error) {
-// 		console.error(error);
-// 		return res.status(500).json("Internal server error !!!");
-// 	}
-// };
-
-// export const getAllUserInfo = async (req, res) => {
-// 	try {
-// 	  const selection = JSON.parse(req.query.select) || {};
-// 	  const limit = parseInt(req.query.limit) || 20;
-// 	  const currentPage = parseInt(req.query.page) || 1;
-// 	  const searchTerm = req.query.searchTerm || ""; // Include searchTerm parameter
-  
-// 	  let query = {};
-  
-// 	  if (searchTerm) {
-// 		// Add a condition to filter based on the search term
-// 		query.$or = [
-// 		  // Customize this condition to match your data structure
-// 		  { first_name: { $regex: searchTerm, $options: 'i' } },
-// 		  // Add other fields if needed
-// 		];
-// 	  }
-  
-// 	  if (selection.length > 0) {
-// 		query.$or = [
-// 		  ...(query.$or || []), // Keep existing conditions if any
-// 		  ...selection.map((item) => ({
-// 			[item.key]: item.value,
-// 		  })),
-// 		];
-// 	  }
-  
-// 	  const result = await model
-// 		.find(query)
-// 		.skip((currentPage - 1) * limit)
-// 		.limit(limit);
-  
-// 	  return res.status(200).json({ result });
-// 	} catch (error) {
-// 	  console.error(error);
-// 	  return res.status(500).json("Internal server error !!!");
-// 	}
-//   };
 
 export const getAllUserInfo = async (req, res) => {
 	try {
-	  const selections = JSON.parse(req.query.select) || {};
-	  const searchTerm = req.query.searchTerm || '';
-	  const limit = parseInt(req.query.limit) || 20;
-	  const currentPage = parseInt(req.query.page) || 1;
-	  const totalCount = await Usermodel.countDocuments();
-	  const totalPages = Math.ceil(totalCount/limit);
-  
-	  const query = {};
-  
-	  if (selections.domain && selections.domain.length > 0) {
-		query.domain = { $in: selections.domain };
-	  }
-  
-	  if (selections.gender && selections.gender.length > 0) {
-		query.gender = { $in: selections.gender };
-	  }
-  
-	  if (selections.availability && selections.availability.length > 0) {
-		query.availability = { $in: selections.availability };
-	  }
-  
-	  if (searchTerm) {
-		query.$or = [
-		  { first_name: { $regex: searchTerm, $options: 'i' } },
-		  { last_name: { $regex: searchTerm, $options: 'i' } },
-		];
-	  }
-  
-	  console.log('Query:', query); // Add this line to log the query
-  
-	  const result = await Usermodel
-		.find(query)
-		.skip((currentPage - 1) * limit)
-		.limit(limit);
-  
-	  console.log('Result:', result); // Add this line to log the result
-  
-	  return res.status(200).json({ result, totalPages });
-	} catch (error) {
-	  console.error(error);
-	  return res.status(500).json("Internal server error !!!");
-	}
-  };
+		// const selections = JSON.parse(req.query.select) || {};
+		const searchTerm = req.query.searchTerm || '';
+		const limit = parseInt(req.query.limit) || 20;
+		const currentPage = parseInt(req.query.page) || 1;
+		const totalCount = await Usermodel.countDocuments();
+		const totalPages = Math.ceil(totalCount/limit);
 	
-  
+	
+		if (searchTerm) 
+		{
+		  
+		  const result = await Usermodel
+		  .find({$or : [
+			{ first_name: { $regex: searchTerm, $options: 'i' } },
+			{ last_name: { $regex: searchTerm, $options: 'i' } },
+		  ]})
+		  .skip((currentPage - 1) * limit)
+		  .limit(limit);
+	
+		console.log('Result:', result); // Add this line to log the result
+	
+		return res.status(200).json({ result, totalPages });
+		}else{
+			const result = await Usermodel
+		  .find({})
+		  .skip((currentPage - 1) * limit)
+		  .limit(limit);
+	
+		console.log('Result:', result); // Add this line to log the result
+	
+		return res.status(200).json({ result, totalPages });
+		}
 
+	
+	  } catch (error) {
+		console.error(error);
+		return res.status(500).json("Internal server error !!!");
+	  }
+}
 
 
 
@@ -224,6 +77,8 @@ export const getUserInfo = async (req, res) => {
 
 export const updateUserInfo = async (req, res) => {
 	const { id } = req.params;
+	console.log("idddd", id)
+	console.log("req.body", req.body)
 
 	try {
 		const userId = await Usermodel.findByIdAndUpdate(id, req.body)
@@ -245,6 +100,20 @@ export const deleteUser = async (req, res) => {
 		} else {
 			return res.status(200).json("User deleted successfully !!!")
 		}
+	} catch (error) {
+		return res.status(500).json("Internal server error !!!")
+	}
+}
+
+export const filterData = async(req,res)=>{
+	// console.log(domain,gender,availability);
+	const selections = JSON.parse(req.query.select) || {};
+	const {domain,gender,availability} = selections;
+	
+	try {
+		const user = await Usermodel.find({$and:[{domain:domain},{gender:gender},{available:availability}]})
+		console.log(user);
+		return res.status(200).json({result:user})
 	} catch (error) {
 		return res.status(500).json("Internal server error !!!")
 	}

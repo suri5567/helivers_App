@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
@@ -6,131 +7,162 @@ import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import axios from 'axios';
 import CreateNewUser from '../components/CreateNewUser';
-import { useSelector} from 'react-redux';
-import {addCartItems} from '../reduxStore/slices/cartItems'
+import { useSelector } from 'react-redux';
+import { addCartItems } from '../reduxStore/slices/cartItems';
 import { useDispatch } from 'react-redux';
-import {updateCounter} from '../reduxStore/slices/cartItems'
+import { updateCounter } from '../reduxStore/slices/cartItems';
 import Pagination from '../components/Pagination';
+import { useNavigate } from 'react-router-dom';
 
 const cardContainerStyle = {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-  gap: '20px',
-  padding: '20px',
+	display: 'grid',
+	gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+	gap: '20px',
+	padding: '20px',
 };
 
 const cardStyle = {
-  maxWidth: 345,
-  boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)',
-  transition: '0.3s',
-  '&:hover': {
-    boxShadow: '0 8px 16px 0 rgba(0, 0, 0, 0.2)',
-    transform: 'scale(1.05)', 
-  },
+	maxWidth: 345,
+	boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)',
+	transition: '0.3s',
+	'&:hover': {
+		boxShadow: '0 8px 16px 0 rgba(0, 0, 0, 0.2)',
+		transform: 'scale(1.05)',
+	},
 };
 
-const buttonStyle = {
-  backgroundColor: 'black',
-  color: 'white',
-  '&:hover': {
-    backgroundColor: 'blue',
-  },
-};
-
-export default function UsersDetails() {
-  const [data, setData] = useState([]);
-  const searchTerm = useSelector((state) => state.searchData.searchTerm);
-  const selectMainInfo = useSelector((state) => state.selectData.select);
-  const createUserInfoPage = useSelector((state)=>state.toggleinfo.userCreatePage) 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [filteredDatainfo, setFilteredDatainfo] = useState([])
-  const dispath = useDispatch();
-  const [cartCounter, setCartCounter] = useState(0);
-
-
-const handleGetAllData = async () => {
-	try {
-	  const res = await axios.get(`http://localhost:8080/api/users`, {
-		params: {
-		  select: JSON.stringify(selectMainInfo),
-		  searchTerm, // Include the search term in the request
-		  page: currentPage,
-		  limit: 20,
-		},
-	  });
-	  if (res.status === 200) {
-		console.log("res.data.res", res.data)
-		setData(res.data);
-
-	  }
-	} catch (error) {
-	  throw error
-	}
-  };
-
-  const handleAddUserInCart = (id)=>{
-	const filteredData  = data.result.find((user)=>user._id==id)
-	setFilteredDatainfo([...filteredDatainfo, filteredData])
-	setCartCounter(cartCounter+1);
+const buttonContainerStyle = {
+	display: 'flex',
+	flexDirection: 'column',
+	gap: '10px',
 }
 
-useEffect(()=>{
-	dispath(addCartItems(filteredDatainfo))
-	dispath(updateCounter(cartCounter))
-},[filteredDatainfo, cartCounter])
+const buttonStyle = {
+	backgroundColor: 'black',
+	color: 'white',
+	'&:hover': {
+		backgroundColor: 'blue',
+	},
+};
 
-console.log("filteredddd", filteredDatainfo)
+const deleteButtonStyle = {
+	backgroundColor: 'red',
+	color: 'white',
+	'&:hover': {
+		backgroundColor: 'darkred',
+	},
+};
+
+const updateButtonStyle = {
+	backgroundColor: 'green',
+	color: 'white',
+	'&:hover': {
+		backgroundColor: 'darkgreen',
+	},
+};
+
+export default function UsersDetails({ data, setData}) {
+	// const [data, setData] = useState([]);
+	const searchTerm = useSelector((state) => state.searchData.searchTerm);
+	const selectMainInfo = useSelector((state) => state.selectData.select);
+	const createUserInfoPage = useSelector((state) => state.toggleinfo.userCreatePage);
+	const [currentPage, setCurrentPage] = useState(1);
+	const dispath = useDispatch();
+	const navigate = useNavigate();
 
 
-  useEffect(() => {
-    handleGetAllData();
-  }, [searchTerm, currentPage, selectMainInfo]);
+	const handleGetAllData = async () => {
+		try {
+			
+				const res = await axios.get(`http://localhost:8080/api/users`, {
+					params: {
+						searchTerm,
+						page: currentPage,
+						limit: 20,
+					},
+				});
+				if (res.status === 200) {
+					setData(res.data);
+				}
+			
+		} catch (error) {
+			throw error;
+		}
+	};
 
-//   console.log("ddd", selectMainInfo)
+	const updateUser = (id) =>{
+        navigate(`/updateuser/${id}`)
+	}
 
-  return (
-	<>
-    <div style={{ marginTop: "25px", position:"relative", filter:createUserInfoPage===true ? "blur(25px)":"none"}}>
-      <div style={cardContainerStyle}>
-        {data.result ? (
-          data.result.map((user) => (
-            <Card key={user._id} sx={cardStyle}>
-              <CardHeader
-                title={user.first_name}
-                avatar={
-                  <Avatar src={user.avatar} alt="User Avatar" />
-                }
-              />
-              <CardMedia
-                component="img"
-                height="194"
-                image={user.avatar}
-                alt="User Avatar"
-              />
-              <CardContent>
-                <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center' }}>
-                  {user.domain}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button sx={buttonStyle} fullWidth onClick={()=>handleAddUserInCart(user._id)}>
-                  Select User
-                </Button>
-              </CardActions>
-            </Card>
-          ))
-        ) : (
-          <div>Loading, please wait...</div>
-        )}
-      </div>
-	  <Pagination totalPages={data?.totalPages} activePage={currentPage} handlePage={setCurrentPage} />
-    </div>
-	  <CreateNewUser />
-	</>
-  );
+
+	const handleDeleteUser = async (id) => {
+		try {
+			const res = await axios.delete(`http://localhost:8080/api/users/${id}`);
+			if (res.status === 200) {
+				handleGetAllData();
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	useEffect(() => {
+			handleGetAllData();
+
+	}, [searchTerm, currentPage, selectMainInfo]);
+
+	const handleWholeInfo = (id)=>{
+       navigate(`/userdata/${id}`)
+	}
+
+	return (
+		<>
+			<div style={{ marginTop: "25px", position: "relative", filter: createUserInfoPage === true ? "blur(25px)" : "none" }}>
+				<div style={cardContainerStyle}>
+					{data.result ? (
+						data.result.map((user) => (
+							<Card key={user._id} sx={cardStyle} >
+								<CardHeader
+									title={user.first_name}
+									avatar={<Avatar src={user.avatar} alt="User Avatar" />}
+								/>
+								<CardMedia
+									component="img"
+									height="194"
+									image={user.avatar}
+									alt="User Avatar"
+									onClick={()=>handleWholeInfo(user._id)}
+									style={{cursor:"pointer"}}
+								/>
+								<CardContent>
+									<Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center' }}>
+										{user.domain}
+									</Typography>
+								</CardContent>
+								<CardActions style={buttonContainerStyle}>
+									<Button sx={buttonStyle} fullWidth onClick={() => dispath(addCartItems(user))}>
+										Select User
+									</Button>
+									<Button sx={updateButtonStyle} fullWidth onClick={() => updateUser(user._id)}>
+										Update User
+									</Button>
+									<Button sx={deleteButtonStyle} fullWidth onClick={() => handleDeleteUser(user._id)}>
+										Delete User
+									</Button>
+								</CardActions>
+							</Card>
+						))
+					) : (
+						<div>Loading, please wait...</div>
+					)}
+				</div>
+				<Pagination totalPages={data?.totalPages} activePage={currentPage} handlePage={setCurrentPage} />
+			</div>
+			<CreateNewUser />
+		</>
+	);
 }
