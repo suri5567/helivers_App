@@ -46,7 +46,7 @@ export default function TemporaryDrawer({setData}) {
 	
 	const handleSelection = async () => {
 		try {
-		  const res = await axios.get(`http://localhost:8080/api/filter`, {
+		  const res = await axios.get(`https://mernapp-user.onrender.com/api/filter`, {
 			params: {
 				select: JSON.stringify(select)
 			  },
@@ -85,7 +85,9 @@ export default function TemporaryDrawer({setData}) {
 						<MenuItem value="Sales">Sales</MenuItem>
 						<MenuItem value="Marketing">Marketing</MenuItem>
 						<MenuItem value="Finance">Finance</MenuItem>
+						<MenuItem value="Engineering">Engineering</MenuItem>
 						<MenuItem value="IT">IT</MenuItem>
+						<MenuItem value="HR">HR</MenuItem>
 						<MenuItem value="Management">Management</MenuItem>
 						<MenuItem value="UIDesigning">UI Designing</MenuItem>
 						<MenuItem value="BusinessDevelopment">Business Development</MenuItem>
@@ -100,8 +102,8 @@ export default function TemporaryDrawer({setData}) {
 						onChange={updateSelection('gender')}
 						renderValue={(selected) => selected.join(', ')}
 					>
-						<MenuItem value="Male">Male</MenuItem>
-						<MenuItem value="Female">Female</MenuItem>
+						<MenuItem value="male">Male</MenuItem>
+						<MenuItem value="female">Female</MenuItem>
 					</Select>
 				</FormControl>
 				<FormControl fullWidth sx={{ marginBottom: 2 }}>

@@ -44,6 +44,8 @@ const buttonContainerStyle = {
 const buttonStyle = {
 	backgroundColor: 'black',
 	color: 'white',
+	textTransform: 'none',
+	fontFamily: 'Arial, sans-serif',
 	'&:hover': {
 		backgroundColor: 'blue',
 	},
@@ -52,21 +54,26 @@ const buttonStyle = {
 const deleteButtonStyle = {
 	backgroundColor: 'red',
 	color: 'white',
+	textTransform: 'none',
+	fontFamily: 'Arial, sans-serif',
 	'&:hover': {
 		backgroundColor: 'darkred',
 	},
 };
 
+
 const updateButtonStyle = {
 	backgroundColor: 'green',
 	color: 'white',
+	textTransform: 'none',
+	fontFamily: 'Arial, sans-serif',
 	'&:hover': {
 		backgroundColor: 'darkgreen',
 	},
 };
 
-export default function UsersDetails({ data, setData}) {
-	// const [data, setData] = useState([]);
+
+export default function UsersDetails({ data, setData }) {
 	const searchTerm = useSelector((state) => state.searchData.searchTerm);
 	const selectMainInfo = useSelector((state) => state.selectData.select);
 	const createUserInfoPage = useSelector((state) => state.toggleinfo.userCreatePage);
@@ -77,31 +84,31 @@ export default function UsersDetails({ data, setData}) {
 
 	const handleGetAllData = async () => {
 		try {
-			
-				const res = await axios.get(`http://localhost:8080/api/users`, {
-					params: {
-						searchTerm,
-						page: currentPage,
-						limit: 20,
-					},
-				});
-				if (res.status === 200) {
-					setData(res.data);
-				}
-			
+
+			const res = await axios.get(`https://mernapp-user.onrender.com/api/users`, {
+				params: {
+					searchTerm,
+					page: currentPage,
+					limit: 20,
+				},
+			});
+			if (res.status === 200) {
+				setData(res.data);
+			}
+
 		} catch (error) {
 			throw error;
 		}
 	};
 
-	const updateUser = (id) =>{
-        navigate(`/updateuser/${id}`)
+	const updateUser = (id) => {
+		navigate(`/updateuser/${id}`)
 	}
 
 
 	const handleDeleteUser = async (id) => {
 		try {
-			const res = await axios.delete(`http://localhost:8080/api/users/${id}`);
+			const res = await axios.delete(`https://mernapp-user.onrender.com/api/users/${id}`);
 			if (res.status === 200) {
 				handleGetAllData();
 			}
@@ -111,32 +118,32 @@ export default function UsersDetails({ data, setData}) {
 	};
 
 	useEffect(() => {
-			handleGetAllData();
+		handleGetAllData();
 
 	}, [searchTerm, currentPage, selectMainInfo]);
 
-	const handleWholeInfo = (id)=>{
-       navigate(`/userdata/${id}`)
+	const handleWholeInfo = (id) => {
+		navigate(`/userdata/${id}`)
 	}
 
 	return (
 		<>
-			<div style={{ marginTop: "25px", position: "relative", filter: createUserInfoPage === true ? "blur(25px)" : "none" }}>
+			<div style={{ marginTop: "2px", position: "relative", filter: createUserInfoPage === true ? "blur(25px)" : "none" }}>
 				<div style={cardContainerStyle}>
 					{data.result ? (
 						data.result.map((user) => (
-							<Card key={user._id} sx={cardStyle} >
+							<Card key={user._id} sx={cardStyle} style={{ borderRadius: "10px" }}>
 								<CardHeader
 									title={user.first_name}
 									avatar={<Avatar src={user.avatar} alt="User Avatar" />}
 								/>
 								<CardMedia
 									component="img"
-									height="194"
+									height="150"
 									image={user.avatar}
 									alt="User Avatar"
-									onClick={()=>handleWholeInfo(user._id)}
-									style={{cursor:"pointer"}}
+									onClick={() => handleWholeInfo(user._id)}
+									style={{ cursor: "pointer" }}
 								/>
 								<CardContent>
 									<Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center' }}>
@@ -145,7 +152,7 @@ export default function UsersDetails({ data, setData}) {
 								</CardContent>
 								<CardActions style={buttonContainerStyle}>
 									<Button sx={buttonStyle} fullWidth onClick={() => dispath(addCartItems(user))}>
-										Select User
+										Add to Team
 									</Button>
 									<Button sx={updateButtonStyle} fullWidth onClick={() => updateUser(user._id)}>
 										Update User

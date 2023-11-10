@@ -39,7 +39,7 @@ function CreateNewUser() {
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-		const res = await axios.post("http://localhost:8080/api/users", formData);
+		const res = await axios.post("https://mernapp-user.onrender.com/api/users", formData);
 		try {
 			if (res.status === 201) {
 				setFormData({
@@ -77,6 +77,7 @@ function CreateNewUser() {
 				maxHeight: '80vh', 
 				marginTop:"50px"
 			}}
+			style={{marginLeft:"10px", marginRight:"12px"}}
 		>
 			<form onSubmit={handleSubmit}>
 				<TextField
@@ -87,7 +88,7 @@ function CreateNewUser() {
 					name="first_name"
 					value={formData.first_name}
 					onChange={handleChange}
-					style={{ marginBottom: '2px' }}
+					style={{ marginBottom: '-2px' }}
 				/>
 				<TextField
 					label="Last Name"
@@ -97,7 +98,7 @@ function CreateNewUser() {
 					name="last_name"
 					value={formData.last_name}
 					onChange={handleChange}
-					style={{ marginBottom: '2px' }}
+					style={{ marginBottom: '-2px' }}
 				/>
 				<TextField
 					label="Email"
@@ -107,7 +108,7 @@ function CreateNewUser() {
 					name="email"
 					value={formData.email}
 					onChange={handleChange}
-					style={{ marginBottom: '2px' }}
+					style={{ marginBottom: '-2px' }}
 				/>
 				<TextField
 					label="Gender"
@@ -117,7 +118,7 @@ function CreateNewUser() {
 					name="gender"
 					value={formData.gender}
 					onChange={handleChange}
-					style={{ marginBottom: '2px' }}
+					style={{ marginBottom: '-2px' }}
 				/>
 				<TextField
 					label="Domain"
@@ -127,7 +128,7 @@ function CreateNewUser() {
 					name="domain"
 					value={formData.domain}
 					onChange={handleChange}
-					style={{ marginBottom: '2px' }}
+					style={{ marginBottom: '-2px' }}
 				/>
 				<TextField
 					label="Image (URL)"
@@ -137,7 +138,7 @@ function CreateNewUser() {
 					name="avatar"
 					value={formData.avatar}
 					onChange={handleChange}
-					style={{ marginBottom: '2px' }}
+					style={{ marginBottom: '-2px' }}
 				/>
 				<TextField
 					select
@@ -148,12 +149,12 @@ function CreateNewUser() {
 					name="available"
 					value={formData.available}
 					onChange={handleChange}
-					style={{ marginBottom: '2px' }}
+					style={{ marginBottom: '-2px' }}
 				>
 					<MenuItem value={'true'}>true</MenuItem>
 					<MenuItem value={'false'}>false</MenuItem>
 				</TextField>
-				<Button variant="contained" color="primary" type="submit" fullWidth>
+				<Button variant="contained" color="primary" type="submit" width="30px" style={{marginTop:"12px", marginLeft:"125px"}}  >
 					Create User
 				</Button>
 			</form>
@@ -162,3 +163,6 @@ function CreateNewUser() {
 }
 
 export default CreateNewUser;
+
+
+

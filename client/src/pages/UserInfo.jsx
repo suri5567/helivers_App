@@ -42,7 +42,7 @@ const UserInfo = () => {
 
   const handleUser = async () => {
     try {
-      const res = await axios.get(`http://localhost:8080/api/users/${id}`);
+      const res = await axios.get(`https://mernapp-user.onrender.com/api/users/${id}`);
       if (res.status === 200) {
         setUserDetailedData(res.data);
       }

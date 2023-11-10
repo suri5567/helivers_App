@@ -44,7 +44,7 @@ function UpdateuserDetails() {
 
 	const handleUpdatedetail = async (event) => {
 		event.preventDefault();
-		const res = await axios.put(`http://localhost:8080/api/users/${id}`, formData);
+		const res = await axios.put(`https://mernapp-user.onrender.com/api/users/${id}`, formData);
 		try {
 			if (res.status === 201) {
 				setFormData({

@@ -16,7 +16,8 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    marginTop: '20px', 
+    margin: '20px', 
+	marginTop:"30px"
   },
   paper: {
     display: 'flex',
@@ -68,7 +69,7 @@ const Cart = () => {
 
   return (
     <div style={styles.container}>
-      <h2 style={{ marginBottom: '20px' }}>Shopping Cart</h2>
+      <h2 style={{ marginTop: '50px', marginBottom:"8px" }}>Team Members</h2>
       <Grid container spacing={2}>
         {cartItems.map((item) => (
           <Grid item xs={12} sm={6} md={4} key={item._id}>
